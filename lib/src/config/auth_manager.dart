@@ -1,5 +1,27 @@
+import 'dart:io';
+
+// Function to add AuthManager creation to the main creation process
+Future<void> createAuthManagerFiles() async {
+  await createAuthManager();
+}
+
+/// Creates the `user_manager.dart` file with a generic user management system
+/// that can work with any user model.
+///
+/// The generated file includes:
+/// * Generic AuthManager class that can work with any user model
+/// * Login/logout functionality
+/// * Persistent storage using SharedPreferences
+/// * ChangeNotifier for state management
+/// * Global instance similar to themeManager
+///
+/// The file is written to the `lib/config/user` directory.
+Future<void> createAuthManager() async {
+  // Create user directory
+  Directory('lib/config/auth').createSync(recursive: true);
+
+  File('lib/config/auth/auth_manager.dart').writeAsStringSync('''
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,7 +67,6 @@ class AuthManager<T> extends ChangeNotifier {
     _isLoggedIn = true;
     await _saveUserToPrefs();
     notifyListeners();
-    log('User logged in: ${_currentUser.toString()}');
   }
   
   /// Logout user and clear all data
@@ -54,7 +75,6 @@ class AuthManager<T> extends ChangeNotifier {
     _isLoggedIn = false;
     await _clearUserFromPrefs();
     notifyListeners();
-    log('User logged out');
   }
   
   /// Update current user data
@@ -63,7 +83,6 @@ class AuthManager<T> extends ChangeNotifier {
       _currentUser = userData;
       await _saveUserToPrefs();
       notifyListeners();
-      log('User updated: ${_currentUser.toString()}');
     }
   }
   
@@ -83,9 +102,8 @@ class AuthManager<T> extends ChangeNotifier {
           _currentUser = jsonDecode(userDataString) as T;
         }
       }
-      log('User loaded: ${_currentUser.toString()}');
     } catch (e) {
-      debugPrint('Error loading user data: $e');
+      debugPrint('Error loading user data: \$e');
       await _clearUserFromPrefs();
     }
   }
@@ -105,9 +123,8 @@ class AuthManager<T> extends ChangeNotifier {
         }
         await prefs.setString(_userKey, userDataString);
       }
-      log('User data saved: ${_currentUser.toString()}');
     } catch (e) {
-      debugPrint('Error saving user data: $e');
+      debugPrint('Error saving user data: \$e');
     }
   }
   
@@ -117,9 +134,12 @@ class AuthManager<T> extends ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_userKey);
       await prefs.setBool(_isLoggedInKey, false);
-      log('User data cleared');
     } catch (e) {
-      debugPrint('Error clearing user data: $e');
+      debugPrint('Error clearing user data: \$e');
     }
   }
+}
+''');
+
+  print('Created user_manager.dart 🎉');
 }

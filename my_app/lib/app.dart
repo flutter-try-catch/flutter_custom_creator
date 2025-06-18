@@ -1,3 +1,6 @@
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'config/theme/theme_manager.dart';
 import 'config/auth/auth_manager.dart';
@@ -27,7 +30,8 @@ class _AppState extends State<App> {
   }
 
   void _notifyChange() {
-    setState(() {}); // Rebuild the widget when the theme changes
+    log('Theme or Auth state changed');
+    setState(() {});
   }
 
   @override
@@ -35,8 +39,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       title: AppConstants.appName,
       theme: themeManager.themeData,
-      home: Container(),
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: authManager.isLoggedIn,
       navigatorKey: AppRouter.navigatorKey,
       initialRoute: '/',
       onGenerateRoute: AppRouter.onGenerateRoute,

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:my_app/features/test/inject_test.dart';
 
 import 'core/network/api_provider.dart';
 
@@ -18,5 +19,7 @@ class ServiceLocator {
   Future<void> setup() async {
     getIt.registerFactory(() => Dio());
     getIt.registerFactory(() => ApiProvider(getIt()));
+
+    injectTest();
   }
 }

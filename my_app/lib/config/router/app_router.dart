@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/features/test/presentation/screens/test_screen.dart';
 import 'unknown_route.dart';
 
 class AppRouter {
@@ -10,7 +11,7 @@ class AppRouter {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(
-            builder: (_) => const Scaffold(), settings: settings);
+            builder: (_) => const TestScreen(), settings: settings);
       default:
         return unknownRoute;
     }
