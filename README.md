@@ -40,6 +40,7 @@ lib/
 - **Config**: Contains helper functions, routing configurations, and theme management.
 - **Core**: Includes network-related utilities and general-purpose utility functions.
 - **Features**: Houses the main application file, dependency injection setup, and the entry point of the app.
+- **Flavors (Optional)**: Automatically sets up multi-environment support (`dev`, `staging`, `prod`) using `flutter_flavorizr`, configuring native Android and iOS setups with zero manual effort.
 
 ## Getting Started
 
@@ -54,11 +55,13 @@ lib/
 
 To create a new Flutter project using this custom app structure:
 
-2. Use the tool to create a new project:
+1. Use the tool to create a new project:
    ```
    flutter_custom_creator example com.yourdomain
    ```
    Replace `example` with your desired project name and `com.yourdomain` with your app's domain.
+
+2. The tool will optionally prompt you to add Flavors (multi-environment setup). If you choose `y`, it will automatically configure `dev`, `staging`, and `prod` environments along with VS Code launch configurations.
 
 3. This will create a new Flutter project with the custom structure and files provided by this package.
 
@@ -67,6 +70,7 @@ To create a new Flutter project using this custom app structure:
    cd example
    flutter run
    ```
+   *(If you enabled Flavors, you can run specific environments like: `flutter run --flavor dev -t lib/main_dev.dart`)*
 
 ### Customizing Your App
 
