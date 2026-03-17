@@ -5,6 +5,12 @@ import 'package:flutter_custom_creator/src/core/create_app_utils.dart';
 import 'package:flutter_custom_creator/src/app/create_injection_container.dart';
 import 'package:flutter_custom_creator/src/config/create_router.dart';
 import 'package:flutter_custom_creator/src/config/create_theme_file.dart';
+import 'package:flutter_custom_creator/src/flavors/create_flavor_config.dart';
+import 'package:flutter_custom_creator/src/flavors/create_flavor_main_files.dart';
+import 'package:flutter_custom_creator/src/flavors/create_flavorizr_config.dart';
+import 'package:flutter_custom_creator/src/flavors/create_launch_json.dart';
+import 'package:flutter_custom_creator/src/flavors/update_endpoints.dart';
+import 'package:flutter_custom_creator/src/flavors/create_flavor_readme.dart';
 import 'package:yaml_edit/yaml_edit.dart';
 
 import 'src/app/create_app_file.dart';
@@ -69,6 +75,31 @@ Future<void> createCustomProject(
   await createCustomFiles(appName: projectName);
 
   print('yor project "$projectName" created successfully! 🎉');
+}
+
+/// Sets up flavor support for the generated project.
+///
+/// This function should be called after [createCustomProject] while the
+/// current working directory is still inside the generated project.
+///
+/// It performs the following:
+/// 1. Creates the FlavorConfig singleton class
+/// 2. Creates flavor-specific entry points (main_dev, main_staging, main_prod)
+/// 3. Configures flutter_flavorizr and runs it to generate native configs
+/// 4. Updates app_endpoints.dart to use FlavorConfig
+/// 5. Creates VS Code launch.json with flavor debug configurations
+/// 6. Appends flavors documentation to README.md
+Future<void> setupFlavors(String projectName, String organization) async {
+  print('\nSetting up flavors...');
+
+  await createFlavorConfig();
+  await createFlavorMainFiles(appName: projectName);
+  await setupFlavorizr(appName: projectName, organization: organization);
+  await updateEndpointsForFlavors();
+  await createLaunchJson();
+  await createFlavorReadme(appName: projectName);
+
+  print('\nFlavors setup completed successfully! 🎉');
 }
 
 /// Adds the following dependencies to the project's pubspec.yaml:
